@@ -1,10 +1,7 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import sensor
-from esphome.const import (
-    CONF_ID,
-    ICON_THERMOMETER,
-)
+from esphome.const import CONF_ID, ICON_THERMOMETER
 
 hot_tub_ns = cg.esphome_ns.namespace("hot_tub")
 HotTub = hot_tub_ns.class_("HotTub", cg.Component)
@@ -18,39 +15,24 @@ CONF_ERROR_MESSAGES = "error_messages"
 
 CONFIG_SCHEMA = cv.Schema(
     {
-        # id optional
-        cv.Optional(CONF_ID): cv.declare_id(HotTub),
+        # Key point: GenerateID makes it optional in YAML but always present in config.
+        cv.GenerateID(): cv.declare_id(HotTub),
 
         cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(
             unit_of_measurement="°F",
             icon=ICON_THERMOMETER,
             accuracy_decimals=1,
         ),
-
-        # Numeric 0/1 (closed is 1)
-        cv.Optional(CONF_PRESSURE_SWITCH_STATE): sensor.sensor_schema(
-            accuracy_decimals=0,
-        ),
-
-        cv.Optional(CONF_PUMP_1_STATE): sensor.sensor_schema(
-            accuracy_decimals=0,
-        ),
-        cv.Optional(CONF_PUMP_2_STATE): sensor.sensor_schema(
-            accuracy_decimals=0,
-        ),
-
-        cv.Optional(CONF_HEATING_ACTIVE): sensor.sensor_schema(
-            accuracy_decimals=0,
-        ),
-
-        cv.Optional(CONF_ERROR_MESSAGES): sensor.sensor_schema(
-            accuracy_decimals=0,
-        ),
+        cv.Optional(CONF_PRESSURE_SWITCH_STATE): sensor.sensor_schema(accuracy_decimals=0),
+        cv.Optional(CONF_PUMP_1_STATE): sensor.sensor_schema(accuracy_decimals=0),
+        cv.Optional(CONF_PUMP_2_STATE): sensor.sensor_schema(accuracy_decimals=0),
+        cv.Optional(CONF_HEATING_ACTIVE): sensor.sensor_schema(accuracy_decimals=0),
+        cv.Optional(CONF_ERROR_MESSAGES): sensor.sensor_schema(accuracy_decimals=0),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
 async def to_code(config):
-    var = cg.new_Pvariable(config.get(CONF_ID))
+    var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
 
     if CONF_TEMPERATURE in config:
