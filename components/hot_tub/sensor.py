@@ -4,7 +4,6 @@ from esphome.components import sensor
 from esphome.const import (
     CONF_ID,
     ICON_THERMOMETER,
-    UNIT_FAHRENHEIT,
 )
 
 hot_tub_ns = cg.esphome_ns.namespace("hot_tub")
@@ -17,24 +16,22 @@ CONF_PUMP_2_STATE = "pump_2_state"
 CONF_HEATING_ACTIVE = "heating_active"
 CONF_ERROR_MESSAGES = "error_messages"
 
-
 CONFIG_SCHEMA = cv.Schema(
     {
-        # Make id optional (user requested no required id)
+        # id optional
         cv.Optional(CONF_ID): cv.declare_id(HotTub),
 
         cv.Optional(CONF_TEMPERATURE): sensor.sensor_schema(
-            unit_of_measurement=UNIT_FAHRENHEIT,
+            unit_of_measurement="°F",
             icon=ICON_THERMOMETER,
             accuracy_decimals=1,
         ),
 
-        # Numeric 0/1 (you want "closed is 1")
+        # Numeric 0/1 (closed is 1)
         cv.Optional(CONF_PRESSURE_SWITCH_STATE): sensor.sensor_schema(
             accuracy_decimals=0,
         ),
 
-        # Numeric pump states (Pump1: 0/1/2, Pump2: 0/1)
         cv.Optional(CONF_PUMP_1_STATE): sensor.sensor_schema(
             accuracy_decimals=0,
         ),
@@ -42,21 +39,17 @@ CONFIG_SCHEMA = cv.Schema(
             accuracy_decimals=0,
         ),
 
-        # Numeric 0/1
         cv.Optional(CONF_HEATING_ACTIVE): sensor.sensor_schema(
             accuracy_decimals=0,
         ),
 
-        # Integer bitmask
         cv.Optional(CONF_ERROR_MESSAGES): sensor.sensor_schema(
             accuracy_decimals=0,
         ),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
-
 async def to_code(config):
-    # If CONF_ID is omitted, this still works: a new variable is created and the ID is auto-generated.
     var = cg.new_Pvariable(config.get(CONF_ID))
     await cg.register_component(var, config)
 
