@@ -55,6 +55,11 @@ void HotTub::setup() {
   CalculateTemp(RawADValue);
   MeasuredTemp = RawMeasuredTemp;
 
+  //try to force no decimal
+    if (heating_active_ != nullptr) {
+    heating_active_->set_accuracy_decimals(0);
+  }
+  
   // publish initial values once
   publish_if_changed_();
 
