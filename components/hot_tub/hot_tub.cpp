@@ -182,7 +182,7 @@ void HotTub::Debounce_Temperature() {
 
   if (DebounceCounter == TEMP_DEBOUNCE_CYCLES) {
     MeasuredTemp = CurrentTemp;
-    ESP_LOGD(TAG, "MeasuredTemp %f", MeasuredTemp);
+    //ESP_LOGD(TAG, "MeasuredTemp %f", MeasuredTemp);
   }
 
   PreviousTemp = CurrentTemp;
